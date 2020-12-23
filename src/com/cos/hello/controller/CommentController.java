@@ -19,7 +19,7 @@ public class CommentController extends HttpServlet {
 
 	}
 
-	// HTTP1.0프로토콜 = SELECT(GET)M DELETE,UPDATE,INSERT(post
+	// HTTP1.0프로토콜 = SELECT(GET), DELETE,UPDATE,INSERT(post)
 	// HTTP 1.1프로토콜 = SELECT(get), DELETE(delete), UPDATE(put), INSERT(post)
 
 	// get요청은 브라우저에 주소적고 엔터!! = SELECT
