@@ -2,14 +2,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@include file="../layout/header.jsp" %>
-<h1>User Info</h1>
-<%
-	String result = (String) request.getAttribute("result");
-%>
-<%=result %>
+<h1>회원정보보기</h1>
+<table border="1">
+	<tr>
+		<th>번호</th>
+		<th>유저네임</th>
+		<th>패스워드</th>
+		<th>이메일</th>
+	</tr>
+	<tr>
+		<th>${user.id}</th>
+		<th>${user.username}</th>
+		<th>${user.password}</th>
+		<th>${user.email}</th>
+	</tr>
+</table>
+<form action="user?gubun=deleteProc" method="post">
+	<input type="hidden" name="id" value="${user.id}"/>
+	<button>삭제</button>
+</form>
 
-<!-- 맞는 코드인데 오류가 난다면 툴 버그여서 지우고 저장 후 다시 작성. -->
-<h1>${result}</h1>
 
 </body>
 </html>
