@@ -1,6 +1,9 @@
 package com.cos.hello.controller;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,8 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.cos.hello.config.DBConn;
+import com.cos.hello.dao.UsersDao;
 import com.cos.hello.model.Users;
 
+// 디스패쳐의 역할 = 분기 = 필요한 view를 응답해주는것.
 public class UserController extends HttpServlet {
 
 	// req와 res는 톰켓이 만들어준다. (클라이언트의 요청이 있을때 마다)
@@ -104,10 +110,35 @@ public class UserController extends HttpServlet {
 			System.out.println(password);
 			System.out.println(email);
 			System.out.println("==========joinProc End==========");
+			
+			
+			
 			// 2. DB에 연결해서 3가지 값을 INSERT 하기
-			// 잠깐 생략
-			// 3. INSERT가 정상적으로 되었다면 index.jsp응답
-			resp.sendRedirect("index.jsp");
+			
+			Users user = Users.builder()
+					.username(username)
+					.password(password)
+					.email(email)
+					.build();
+			
+			// 싱글톤 패턴으로 바꿔보자.
+			UsersDao usersDao = new UsersDao();
+			int result = usersDao.insert(user);
+			
+			// 분기 = 컨트롤러의 책임.
+			if(result == 1) {
+				// 3. INSERT가 정상적으로 되었다면 auth/login.jsp응답
+				resp.sendRedirect("auth/login.jsp");
+			} else {
+				resp.sendRedirect("auth/join.jsp");
+			}
+			
+			
+			
+			
+			
+
+			
 
 		} else if (gubun.equals("loginProc")) {
 			// 아이디와 비밀번호를 서버에서 맞는지 비교해야한다.
