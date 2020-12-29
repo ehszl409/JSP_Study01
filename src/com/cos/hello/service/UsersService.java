@@ -12,6 +12,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.catalina.User;
 
 import com.cos.hello.dao.UsersDao;
+import com.cos.hello.dto.JoinDto;
+import com.cos.hello.dto.LoginDto;
 import com.cos.hello.model.Users;
 import com.cos.hello.utill.Script;
 
@@ -21,36 +23,11 @@ public class UsersService {
 	
 	// 회원가입을 하기 위한 로직이 모두 들어가 있다.
 	public void 회원가입(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		// 데이터 원형 username=PARK&password=123456789&email=PARK@naver.com
-
-		// 1. form의 input태그에 있는 3가지 값 username, password, email 받기
-		// getParameter()는 데이터를 가져 오는 것이 아니라 특정한 형식의 데이터를
-		// 파싱해주는 역할을 하는 함수이다. 데이터는 req(request)가 이미 들고 있다.
-		// 사용자에게 데이터를 받는 가장 쉬운 방법은 form태그에 받는 것이 가장 이상적이다.
-		// 그리고 get의 방식이나 post방식의 데이터를 모두 받을 수 있다.
-		// 단 post방식 중 데이터의 형식이 x-www-form-urlencoded형식의 데이터만 받을 수 있다
-		// x-www-form-urlencoded는 이름=데이터 형식의 데이터다.
-		String username = req.getParameter("username");
-		String password = req.getParameter("password");
-		String email = req.getParameter("email");
-
-		System.out.println("==========joinProc Start==========");
-		System.out.println(username);
-		System.out.println(password);
-		System.out.println(email);
-		System.out.println("==========joinProc End==========");
-
-		// 2. DB에 연결해서 3가지 값을 INSERT 하기
-
-		Users user = Users.builder()
-				.username(username)
-				.password(password)
-				.email(email)
-				.build();
-
+		// 부가적인 것들은 따로 관리하고 핵심적인 로직만 적는다.
+		JoinDto joinDto = (JoinDto)req.getAttribute("dto");
 		// 싱글톤 패턴으로 바꿔보자.
 		UsersDao usersDao = new UsersDao();
-		int result = usersDao.insert(user);
+		int result = usersDao.insert(joinDto);
 		
 
 		// 분기 = 컨트롤러의 책임.
@@ -64,33 +41,15 @@ public class UsersService {
 	}
 	
 	public void 로그인(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
-		// 아이디와 비밀번호를 서버에서 맞는지 비교해야한다.
-		// 1. 값 전달 받기.
-		String username = req.getParameter("username");
-		String password = req.getParameter("password");
-		System.out.println("==========loginProc Start==========");
-		System.out.println(username);
-		System.out.println(password);
-		System.out.println("==========loginProc End==========");
-		
-		
-		// 2. DB에 값이 있는지 select해서 확인
-		// UserDao에서 구현 
-		
-		
-		// 패스워드는 절때 session(JSSID)에 포함시키면 안된다.
-		Users user = Users.builder()
-				.username(username)
-				.password(password)
-				.build();
-		
+		// 부가적인 것들은 따로 관리하고 핵심적인 로직만 적는다.
+		LoginDto loginDto = (LoginDto)req.getAttribute("dto");
 		UsersDao usersDao = new UsersDao();
-		Users userEntity = usersDao.login(user);
+		Users userEntity = usersDao.login(loginDto);
 		
 		if(userEntity != null) {
 			HttpSession session = req.getSession();
 			session.setAttribute("sessionUser", userEntity);
+			
 			// 한글처리를 위해 reap객체를 건드린다.
 			// MIME 타입을 공부해야한다.
 			// Http Header에 Content-Type을 공부하고 이해해야 한다.

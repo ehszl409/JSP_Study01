@@ -4,10 +4,49 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
 	                       http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
-	                       
-	<!-- 왜 URI를 사용했는가?? 
-		모든 정보의 한곳에 다 모아서 관리하기 위해서. -->
-	                       
+
+	<filter>
+		<filter-name>charFilter</filter-name>
+		<filter-class>com.cos.hello.config.CharFilter</filter-class>
+	</filter>
+	
+	<filter>
+		<filter-name>attackFilter</filter-name>
+		<filter-class>com.cos.hello.config.AttackFilter</filter-class>
+	</filter>
+	
+	<filter>
+		<filter-name>joinFilter</filter-name>
+		<filter-class>com.cos.hello.config.JoinFilter</filter-class>
+	</filter>
+	
+	<filter>
+		<filter-name>loginFilter</filter-name>
+		<filter-class>com.cos.hello.config.LoginFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>charFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>attackFilter</filter-name>
+		<url-pattern>/user</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>joinFilter</filter-name>
+		<url-pattern>/user</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>loginFilter</filter-name>
+		<url-pattern>/user</url-pattern>
+	</filter-mapping>
+
+	<!-- 왜 URI를 사용했는가?? 모든 정보의 한곳에 다 모아서 관리하기 위해서. -->
+
 	<!-- 마법의 필터. -->
 	<!-- /front가 실행되면 <servlet-class>가 실행된다. -->
 	<servlet>
@@ -31,6 +70,8 @@
 		<servlet-name>boardController</servlet-name>
 		<url-pattern>/board</url-pattern>
 	</servlet-mapping>
+
+
 
 
 </web-app>

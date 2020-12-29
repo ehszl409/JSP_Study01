@@ -39,6 +39,10 @@ public class UserController extends HttpServlet {
 
 	protected void doProcess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		System.out.println("FrontController 실행됨.");
+		
+		//req.getParameter 함수 실행시에 파싱하게 때문에 파싱전에 인코딩 해줘야 한다.
+		
+		
 
 		// ?뒤의 값을 파싱해준다.
 		// http://localhost:8000/
@@ -49,6 +53,7 @@ public class UserController extends HttpServlet {
 	
 	//  throws IOException 함수 전체를 try / catch로 묶는다.
 	private void route(String gubun, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		
 		// UsersService을 한번만 호출하고 사용하면 된다.
 		UsersService usersService = new UsersService();
 		

@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.cos.hello.config.DBConn;
+import com.cos.hello.dto.JoinDto;
+import com.cos.hello.dto.LoginDto;
 import com.cos.hello.model.Users;
 
 public class UsersDao {
@@ -13,7 +15,7 @@ public class UsersDao {
 	// Users는 String username, String password, String email를 가지고 있어서 
 	// Users 타입을 인자로 받아서 코드의 길이를 줄인다.
 	// 재사용하고 함수의 역할을 정확히 하기위해서 insert라는 이름으로 짓는다.
-	public int insert(Users user) {
+	public int insert(JoinDto joinDto) {
 		
 		// 스트링 컬렉션. 스트링 전용 컬렉션.
 		// 동기화 되어었어서 동시 접근을 못한다.
@@ -25,9 +27,9 @@ public class UsersDao {
 		Connection conn = DBConn.getInstance();
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, user.getUsername());
-			pstmt.setString(2, user.getPassword());
-			pstmt.setString(3, user.getEmail());
+			pstmt.setString(1, joinDto.getUsername());
+			pstmt.setString(2, joinDto.getPassword());
+			pstmt.setString(3, joinDto.getEmail());
 			
 			// DML쿼리는 전부 Update()로 받는다.
 			int result = pstmt.executeUpdate();
@@ -41,7 +43,7 @@ public class UsersDao {
 		return -1;
 	}
 	
-	public Users login(Users users){
+	public Users login(LoginDto loginDto){
 		
 		StringBuffer sb = new StringBuffer();
 		// append()로 긴 문자열을 나눌땐 append사이에 꼭 띄어쓰기를 넣어줘야 SQL문에서 오류가 생기지 않는다.
@@ -52,8 +54,8 @@ public class UsersDao {
 		
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, users.getUsername());
-			pstmt.setString(2, users.getPassword());
+			pstmt.setString(1, loginDto.getUsername());
+			pstmt.setString(2, loginDto.getPassword());
 			
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
